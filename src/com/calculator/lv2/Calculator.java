@@ -14,7 +14,7 @@ public class Calculator {
 
     // 사칙연산 계산 부분 메소드 매개변수로 요소를 받아 계산 후 리턴.
     // throws 키워드를 통해 직접 예외를 처리하지않고 발생지에 처리요청
-    public double calculate(int firstNum, int secondNum, char operator) throws InputMismatchException, ArithmeticException {
+    public double calculate(int firstNum, int secondNum, char operator) throws InputMismatchException, ArithmeticException, OperatorInputException {
         switch (operator) {
             case '+':
                 result = firstNum + secondNum;
@@ -32,7 +32,7 @@ public class Calculator {
             case '/':
                 // 분모가 0일경우 예외 발생 유도.
                 if (secondNum == 0) {
-                    throw new ArithmeticException();
+                    throw new ArithmeticException("0으로는 나눌 수 없습니다.");
                 }
                 result = firstNum / secondNum;
                 saveOperationProcess(firstNum, secondNum, result, operator);
@@ -41,6 +41,9 @@ public class Calculator {
                 result = firstNum % secondNum;
                 saveOperationProcess(firstNum, secondNum, result, operator);
                 break;
+            //연산자 외 문자 입력시 예외 발생 유도
+            default:
+                throw new OperatorInputException("+,-,*,% 연산자만 입력해주세요");
         }
         return result;
     }
