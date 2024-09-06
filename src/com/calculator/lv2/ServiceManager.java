@@ -1,7 +1,6 @@
 package com.calculator.lv2;
 
-import com.calculator.lv2.customexception.EmptyListException;
-import com.calculator.lv2.customexception.OperatorInputException;
+import com.calculator.lv2.customexception.*;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -44,12 +43,13 @@ public class ServiceManager {
                             System.out.println("계산을 진행합니다.");
                             menuFlag = !menuFlag;
                             break;
+                        // 연산 과정, 결과를 확인,삭제 하는 메뉴 생성.
                         case "hist":
                             inMenuFlag = !inMenuFlag;
                             while (inMenuFlag) {
                                 System.out.println("=========================================================================");
                                 System.out.println("메뉴를 0 ~ 9 사이로만 입력해주세요.");
-                                System.out.println("1. 가장 최근 연산 확인. 2. 모든 연산 결과확인. 3. 지정 연산결과 확인.");
+                                System.out.println("1. 가장 최근 연산 결과 확인. 2. 모든 연산 결과확인. 3. 지정 연산결과 확인.");
                                 System.out.println("4. 가장 최근 연산 과정 확인. 5. 모든 연산 과정확인. 6. 지정 연산과정 확인.");
                                 System.out.println("7. 가장 최근 연산 기록 삭제. 8. 모든 연산 삭제. 9. 지정 연산기록 삭제");
                                 System.out.println("0. 메뉴 빠져나오기");
@@ -112,11 +112,11 @@ public class ServiceManager {
                 System.out.print("두 번째 숫자를 입력하세요 : ");
                 secondNum = sc.nextInt();
                 sc.nextLine();
+                // 음의 정수가 들어가있는지 확인.
                 if (calc.negativeIntegerCheck(firstNum, secondNum)) {
                     System.out.println("양의 정수만 입력해주세요.");
                     continue;
                 }
-                ;
                 // 스캐너를 통한 사칙연산 기호 삽입.
                 System.out.print("사칙연산 기호를 입력하세요 : ");
                 String operator = sc.nextLine();
@@ -135,9 +135,9 @@ public class ServiceManager {
                 // 비어있는 List 삭제요청시 예외발생 처리
             } catch (EmptyListException e) {
                 System.out.println(e.getMessage());
-                // index 값 예외발생 처리
+                // index 값 초과,0 미만시 예외발생 처리
             } catch (IndexOutOfBoundsException e) {
-                System.out.println(e.getMessage());
+                System.out.println("정확한 인덱스를 입력해주세요.");
             }
         }
     }
