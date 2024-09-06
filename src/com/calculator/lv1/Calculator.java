@@ -22,6 +22,11 @@ public class Calculator {
                 firstNum = sc.nextInt();
                 System.out.print("두 번째 숫자를 입력하세요 : ");
                 secondNum = sc.nextInt();
+                // 양의 정수인지 검사
+                if (firstNum < 0 || secondNum < 0) {
+                    System.out.println("양의 정수만 입력해주세요.");
+                    continue;
+                }
                 // 스캐너를 통한 사칙연산 기호 삽입.
                 System.out.print("사칙연산 기호를 입력하세요 : ");
                 char operator = sc.next().charAt(0);

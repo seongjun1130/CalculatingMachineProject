@@ -112,6 +112,11 @@ public class ServiceManager {
                 System.out.print("두 번째 숫자를 입력하세요 : ");
                 secondNum = sc.nextInt();
                 sc.nextLine();
+                if (calc.negativeIntegerCheck(firstNum, secondNum)) {
+                    System.out.println("양의 정수만 입력해주세요.");
+                    continue;
+                }
+                ;
                 // 스캐너를 통한 사칙연산 기호 삽입.
                 System.out.print("사칙연산 기호를 입력하세요 : ");
                 String operator = sc.nextLine();

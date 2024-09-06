@@ -78,6 +78,14 @@ public class Calculator {
         }
     }
 
+    public boolean negativeIntegerCheck(int firstNum, int secondNum) {
+        if (firstNum < 0 || secondNum < 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // 지정된 연산 결과 출력
     public double getResult(int index) throws IndexOutOfBoundsException, EmptyListException {
         // 맞지않는 인덱스를 입력시.
