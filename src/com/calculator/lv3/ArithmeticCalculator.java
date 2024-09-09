@@ -1,7 +1,11 @@
 package com.calculator.lv3;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
+import com.calculator.lv3.customexception.*;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 // 연산자 enum 클래스 화
 enum OperatorType {
@@ -10,11 +14,24 @@ enum OperatorType {
     MULT("*"),
     DIV("/"),
     REM("%");
-    private String operator;
 
-    // 싱글톤 디자인패턴
-    private OperatorType(String operator) {
+    // 프로그램이 실행되면 Map을 캐싱해 찾고자 하는 키값을 통해 열거객체 리턴
+    private static final Map<String, OperatorType> OPERATOR_MAP =
+            Collections.unmodifiableMap(Stream.of(values()).collect(Collectors.toMap(OperatorType::getOperator, Function.identity())));
+    private final String operator;
+
+    // 생성자를 통한 String 매칭
+    OperatorType(String operator) {
         this.operator = operator;
+    }
+
+    // 입력된 연산자를 통해 Map 안에서 열거 객체 리턴
+    public static OperatorType find(String operator) {
+        if (OPERATOR_MAP.containsKey(operator)) {
+            return OPERATOR_MAP.get(operator);
+        }
+        //연산자 외 문자 입력시 예외 발생 유도
+        throw new IllegalArgumentException("맞지 않는 연산자 입력 : " + operator);
     }
 
     public String getOperator() {
@@ -27,16 +44,17 @@ public class ArithmeticCalculator {
     // 연산과정 및 결과 저장 List 생성
     private ArrayList<Integer> firstNumbers = new ArrayList<>();
     private ArrayList<Integer> secondNumbers = new ArrayList<>();
-    private ArrayList<OperatorType> operators = new ArrayList<>();
+    private ArrayList<String> operators = new ArrayList<>();
     private ArrayList<Double> results = new ArrayList<>();
     // 연산 과정 출력용 String 변수
     private String calculationProcess = "";
-    OperatorType operatorType = OperatorType.ADD;
+    OperatorType operatorType;
 
-    // 사칙연산 계산 부분 메소드 매개변수로 요소를 받아 계산 후 리턴.
+    // 사칙연산 계산 부분 메소드 매개변수로 요소를 받아 계산 후 리턴
     // throws 키워드를 통해 직접 예외를 처리하지않고 발생지에서 처리요청
+    // 열거 객체를 통한 사칙연산 구분
     public double calculate(int firstNum, int secondNum, String operator) throws InputMismatchException, ArithmeticException, OperatorInputException {
-        operatorType = OperatorType.valueOf(operator);
+        operatorType = OperatorType.find(operator);
         switch (operatorType) {
             case ADD:
                 result = firstNum + secondNum;
@@ -63,9 +81,6 @@ public class ArithmeticCalculator {
                 result = firstNum % secondNum;
                 saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
-            //연산자 외 문자 입력시 예외 발생 유도
-            default:
-                throw new OperatorInputException("+,-,*,/,% 연산자만 입력해주세요");
         }
         return result;
     }
@@ -75,7 +90,7 @@ public class ArithmeticCalculator {
         firstNumbers.add(firstNumber);
         secondNumbers.add(secondNumber);
         results.add(result);
-        operators.add(OperatorType.valueOf(operator));
+        operators.add(operator);
     }
 
     // 빈 List 요청 확인 메소드

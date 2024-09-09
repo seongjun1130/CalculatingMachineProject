@@ -1,5 +1,7 @@
 package com.calculator.lv3;
 
+import com.calculator.lv3.customexception.*;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -13,7 +15,7 @@ public class ServiceManager {
     private boolean flag = true;
     private boolean menuFlag;
     private boolean inMenuFlag = false;
-    private Calculator calc = new Calculator();
+    private ArithmeticCalculator calc = new ArithmeticCalculator();
     private Scanner sc = new Scanner(System.in);
 
     // 서비스 시작 메소드
@@ -29,7 +31,7 @@ public class ServiceManager {
                 그외 문자 입력시 반복 */
                 while (menuFlag) {
                     System.out.println("================================================================================");
-                    System.out.println("계산하시겠습니까? / exit 입력 시 종료 / yes 입력 시 계속 / hist 입력 시 저장된 결과 확인");
+                    System.out.println("계산하시겠습니까? / exit 입력 시 종료 / yes 입력 시 계산 / hist 입력 시 저장된 결과 확인");
                     System.out.print("메뉴 입력 : ");
                     menu = sc.nextLine();
                     System.out.println("================================================================================");
@@ -127,15 +129,15 @@ public class ServiceManager {
             } catch (InputMismatchException e) {
                 System.out.println("숫자 혹은 정수를 입력해주세요.");
                 sc.nextLine();
-                // 정해진 연산자외의 연산자 입력시 예외발생 처리
-            } catch (OperatorInputException e) {
-                System.out.println(e.getMessage());
-                // 비어있는 List 삭제요청시 예외발생 처리
-            } catch (EmptyListException e) {
+            }
+            // 비어있는 List 삭제요청시 예외발생 처리
+            catch (EmptyListException e) {
                 System.out.println(e.getMessage());
                 // index 값 초과,0 미만시 예외발생 처리
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("정확한 인덱스를 입력해주세요.");
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
