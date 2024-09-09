@@ -15,7 +15,7 @@ enum OperatorType {
     DIV("/"),
     REM("%");
 
-    // 프로그램이 실행되면 Map을 캐싱해 찾고자 하는 키값과 필드값을 매칭
+    // 프로그램이 실행되면 Map을 캐싱해 찾고자 하는 키값과 필드값을 매칭 스트림과 람다식을 활용.
     private static final Map<String, OperatorType> OPERATOR_MAP =
             Collections.unmodifiableMap(Stream.of(values()).collect(Collectors.toMap(OperatorType::getOperator, Function.identity())));
     private final String operator;
@@ -130,6 +130,8 @@ public class ArithmeticCalculator<T extends Number> {
         if (emptyListChecker()) {
             throw new EmptyListException("저장된 연산결과가 없습니다.");
         } else {
+            // 스트림을 이용한 출력.
+//            results.stream().forEach(System.out::println);
             for (int i = 0; i < results.size(); i++) {
                 System.out.println(i + 1 + ". 번째 결과 : " + results.get(i));
             }
@@ -231,5 +233,12 @@ public class ArithmeticCalculator<T extends Number> {
             operators.clear();
             results.clear();
         }
+    }
+
+    // 입력값보다 큰값 출력, 스트림,람다식 사용
+    public void getInputLargerThanContent(double baseValue) {
+        System.out.println(baseValue + " 보다 큰 값은");
+        results.stream().filter(result -> baseValue < result).forEach(System.out::println);
+        System.out.println("입니다.");
     }
 }

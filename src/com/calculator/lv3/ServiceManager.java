@@ -12,6 +12,7 @@ public class ServiceManager {
     private int secondNumInt;
     private double firstNumDouble;
     private double secondNumDouble;
+    private double baseNum = 0.0;
     private String number = null;
     private String selIndex = "0";
     private String menu;
@@ -26,6 +27,7 @@ public class ServiceManager {
         // 로직 무한 반복.
         while (true) {
             try {
+                // 해당 입력 숫자가 INT형 인지 DOUBLE형 인지 확인
                 int fisrtdoublecnt = 0;
                 int firstintcnt = 0;
                 int seconddoublecnt = 0;
@@ -55,18 +57,18 @@ public class ServiceManager {
                             inMenuFlag = !inMenuFlag;
                             while (inMenuFlag) {
                                 System.out.println("=========================================================================");
-                                System.out.println("메뉴를 0 ~ 9 사이로만 입력해주세요.");
+                                System.out.println("메뉴를 보기에 맞게 입력해주세요.");
                                 System.out.println("1. 가장 최근 연산 결과 확인. 2. 모든 연산 결과확인. 3. 지정 연산결과 확인.");
                                 System.out.println("4. 가장 최근 연산 과정 확인. 5. 모든 연산 과정확인. 6. 지정 연산과정 확인.");
                                 System.out.println("7. 가장 최근 연산 기록 삭제. 8. 모든 연산 삭제. 9. 지정 연산기록 삭제");
-                                System.out.println("0. 메뉴 빠져나오기");
+                                System.out.println("0. 메뉴 빠져나오기 #. 입력값보다 큰 결과 값 보기");
                                 System.out.println("=========================================================================");
                                 System.out.print("메뉴 입력 :");
                                 selIndex = sc.nextLine();
                                 System.out.println("=========================================================================");
-                                // 숫자를 입력받아 정규식으로 검증 후 메뉴 실행.
-                                if (!selIndex.matches("[0-9]+")) {
-                                    System.out.println("0 ~ 9 사이에서만 입력이 가능합니다.");
+                                // 문자를 입력받아 정규식으로 검증 후 메뉴 실행.
+                                if (!selIndex.matches("[0-9#]+")) {
+                                    System.out.println("보기에 있는 문자만 입력이 가능합니다.");
                                 } else {
                                     switch (selIndex) {
                                         case "0":
@@ -105,6 +107,13 @@ public class ServiceManager {
                                             System.out.println("삭제하고 싶은 순번의 번호를 입력해주세요.");
                                             selIndex = sc.nextLine();
                                             calc.removeResults(Integer.parseInt(selIndex));
+                                            break;
+                                        case "#":
+                                            System.out.println("입력값보다 큰 결과값을 가져옵니다.");
+                                            System.out.print("값을 입력해주세요 : ");
+                                            baseNum = sc.nextDouble();
+                                            calc.getInputLargerThanContent(baseNum);
+                                            sc.nextLine();
                                             break;
                                     }
                                 }
