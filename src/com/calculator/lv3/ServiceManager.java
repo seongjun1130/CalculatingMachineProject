@@ -8,8 +8,11 @@ import java.util.Scanner;
 // 서비스 흐름제어를 위한 매니저 클래스생성
 public class ServiceManager {
     // 제어용 멤버변수 생성
-    private int firstNum = 0;
-    private int secondNum = 0;
+    private int firstNumInt;
+    private int secondNumInt;
+    private double firstNumDouble;
+    private double secondNumDouble;
+    private String number = null;
     private String selIndex = "0";
     private String menu;
     private boolean flag = true;
@@ -23,6 +26,10 @@ public class ServiceManager {
         // 로직 무한 반복.
         while (true) {
             try {
+                int fisrtdoublecnt = 0;
+                int firstintcnt = 0;
+                int seconddoublecnt = 0;
+                int secondintcnt = 0;
                 menuFlag = true;
                 /* 프로그램을 계속 실행할것인지 종료할건지 반복.
                 exit 가 입력될경우 프로그램 종료
@@ -108,35 +115,75 @@ public class ServiceManager {
                 }
                 // 스캐너를 통한 숫자 1,2 입력 후 변수저장.
                 System.out.print("첫 번째 숫자를 입력하세요 : ");
-                firstNum = sc.nextInt();
+                number = sc.nextLine();
+                // 입력받은 숫자가 정수인지 실수인지 검사.
+                if (number.contains(".")) {
+                    firstNumDouble = Double.parseDouble(number);
+                    fisrtdoublecnt++;
+                } else {
+                    firstNumInt = Integer.parseInt(number);
+                    firstintcnt++;
+                }
                 System.out.print("두 번째 숫자를 입력하세요 : ");
-                secondNum = sc.nextInt();
-                sc.nextLine();
-                // 음의 정수가 들어가있는지 확인.
-                if (calc.negativeIntegerCheck(firstNum, secondNum)) {
-                    System.out.println("양의 정수만 입력해주세요.");
-                    continue;
+                number = sc.nextLine();
+                if (number.contains(".")) {
+                    secondNumDouble = Double.parseDouble(number);
+                    seconddoublecnt++;
+                } else {
+                    secondNumInt = Integer.parseInt(number);
+                    secondintcnt++;
                 }
                 // 스캐너를 통한 사칙연산 기호 삽입.
                 System.out.print("사칙연산 기호를 입력하세요 : ");
                 String operator = sc.nextLine();
-                // Calculator 객체를 통한 calculate() 메소드를 통해 계산.
-                System.out.println(firstNum + " " + operator + " " + secondNum + " = " + calc.calculate(firstNum, secondNum, operator));
-                // 0으로 나눗셈 시도시 예외발생 처리
-            } catch (ArithmeticException e) {
+                /* Calculator 객체를 통한 calculate() 메소드를 통해 계산.
+                 정수인지 실수인지에 대한 타입분간.
+                 입력값중 음수가 있는지 판단.*/
+                if (fisrtdoublecnt != 0 && seconddoublecnt != 0) {
+                    if (calc.negativeIntegerChecker(firstNumDouble, secondNumDouble)) {
+                        System.out.println("양수만 입력해주세요.");
+                        continue;
+                    }
+                    System.out.println(firstNumDouble + " " + operator + " " + secondNumDouble + " = " + calc.calculate(firstNumDouble, secondNumDouble, operator));
+                } else if (firstintcnt != 0 && secondintcnt != 0) {
+                    if (calc.negativeIntegerChecker(firstNumInt, secondNumInt)) {
+                        System.out.println("양수만 입력해주세요.");
+                        continue;
+                    }
+                    System.out.println(firstNumInt + " " + operator + " " + secondNumInt + " = " + calc.calculate(firstNumInt, secondNumInt, operator));
+                } else if (firstintcnt != 0 && seconddoublecnt != 0) {
+                    if (calc.negativeIntegerChecker(firstNumInt, secondNumDouble)) {
+                        System.out.println("양수만 입력해주세요.");
+                        continue;
+                    }
+                    System.out.println(firstNumInt + " " + operator + " " + secondNumDouble + " = " + calc.calculate(firstNumInt, secondNumDouble, operator));
+                } else {
+                    if (calc.negativeIntegerChecker(firstNumDouble, secondNumInt)) {
+                        System.out.println("양수만 입력해주세요.");
+                        continue;
+                    }
+                    System.out.println(firstNumDouble + " " + operator + " " + secondNumInt + " = " + calc.calculate(firstNumDouble, secondNumInt, operator));
+                }
+            }
+            // 0으로 나눗셈 시도시 예외발생 처리
+            catch (ArithmeticException e) {
                 System.out.println(e.getMessage());
-                // 숫자 실수 및 문자 입력시 예외발생 처리
-            } catch (InputMismatchException e) {
-                System.out.println("숫자 혹은 정수를 입력해주세요.");
-                sc.nextLine();
             }
             // 비어있는 List 삭제요청시 예외발생 처리
             catch (EmptyListException e) {
                 System.out.println(e.getMessage());
-                // index 값 초과,0 미만시 예외발생 처리
-            } catch (IndexOutOfBoundsException e) {
+            }
+            // index 값 초과,0 미만시 예외발생 처리
+            catch (IndexOutOfBoundsException e) {
                 System.out.println("정확한 인덱스를 입력해주세요.");
-            } catch (IllegalArgumentException e) {
+            }
+            // 숫자외 다른 문자열 입력시 예외발생 처리
+            catch (NumberFormatException e) {
+                System.out.println(e.getMessage());
+                System.out.println("숫자를 입력해주세요.");
+            }
+            // 연산자 외 문자 입력시 예외 발생 유도
+            catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
         }

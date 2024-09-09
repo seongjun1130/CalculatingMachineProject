@@ -15,7 +15,7 @@ enum OperatorType {
     DIV("/"),
     REM("%");
 
-    // 프로그램이 실행되면 Map을 캐싱해 찾고자 하는 키값을 통해 열거객체 리턴
+    // 프로그램이 실행되면 Map을 캐싱해 찾고자 하는 키값과 필드값을 매칭
     private static final Map<String, OperatorType> OPERATOR_MAP =
             Collections.unmodifiableMap(Stream.of(values()).collect(Collectors.toMap(OperatorType::getOperator, Function.identity())));
     private final String operator;
@@ -39,46 +39,48 @@ enum OperatorType {
     }
 }
 
-public class ArithmeticCalculator {
+// Class 제네릭화 Number 하위클래스만 받을수있게 제약
+public class ArithmeticCalculator<T extends Number> {
     private double result = 0;
     // 연산과정 및 결과 저장 List 생성
-    private ArrayList<Integer> firstNumbers = new ArrayList<>();
-    private ArrayList<Integer> secondNumbers = new ArrayList<>();
+    private ArrayList<T> firstNumbers = new ArrayList<>();
+    private ArrayList<T> secondNumbers = new ArrayList<>();
     private ArrayList<String> operators = new ArrayList<>();
     private ArrayList<Double> results = new ArrayList<>();
     // 연산 과정 출력용 String 변수
     private String calculationProcess = "";
+    // 연산자 열거객체 저장변수
     OperatorType operatorType;
 
-    // 사칙연산 계산 부분 메소드 매개변수로 요소를 받아 계산 후 리턴
-    // throws 키워드를 통해 직접 예외를 처리하지않고 발생지에서 처리요청
-    // 열거 객체를 통한 사칙연산 구분
-    public double calculate(int firstNum, int secondNum, String operator) throws InputMismatchException, ArithmeticException, OperatorInputException {
+    /* 사칙연산 계산 부분 메소드 매개변수로 요소를 받아 계산 후 리턴
+     throws 키워드를 통해 직접 예외를 처리하지않고 발생지에서 처리요청
+     열거 객체를 통한 사칙연산 구분 */
+    public double calculate(T firstNum, T secondNum, String operator) throws ArithmeticException, OperatorInputException {
         operatorType = OperatorType.find(operator);
         switch (operatorType) {
             case ADD:
-                result = firstNum + secondNum;
+                result = firstNum.doubleValue() + secondNum.doubleValue();
                 // 연산 과정 및 결과 저장 메서드 호출.
                 saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
             case SUB:
-                result = firstNum - secondNum;
+                result = firstNum.doubleValue() - secondNum.doubleValue();
                 saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
             case MULT:
-                result = firstNum * secondNum;
+                result = firstNum.doubleValue() * secondNum.doubleValue();
                 saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
             case DIV:
                 // 분모가 0일경우 예외 발생 유도.
-                if (secondNum == 0) {
+                if (secondNum.doubleValue() == 0 || secondNum.doubleValue() == 0.0) {
                     throw new ArithmeticException("0으로는 나눌 수 없습니다.");
                 }
-                result = firstNum / secondNum;
+                result = firstNum.doubleValue() / secondNum.doubleValue();
                 saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
             case REM:
-                result = firstNum % secondNum;
+                result = firstNum.doubleValue() % secondNum.doubleValue();
                 saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
         }
@@ -86,7 +88,7 @@ public class ArithmeticCalculator {
     }
 
     // 연산 과정 및 결과 저장 메소드.
-    private void saveCalculationProcess(int firstNumber, int secondNumber, double result, String operator) {
+    private void saveCalculationProcess(T firstNumber, T secondNumber, double result, String operator) {
         firstNumbers.add(firstNumber);
         secondNumbers.add(secondNumber);
         results.add(result);
@@ -95,11 +97,7 @@ public class ArithmeticCalculator {
 
     // 빈 List 요청 확인 메소드
     private boolean emptyListChecker() {
-        if (firstNumbers.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return firstNumbers.isEmpty();
     }
 
     // 요청 index 가 size 를 넘지 않았는지 체크메소드
@@ -107,9 +105,9 @@ public class ArithmeticCalculator {
         return firstNumbers.size() < index;
     }
 
-    //입력값 중 음의정수가 있는지 확인하는 메소드
-    public boolean negativeIntegerCheck(int firstNum, int secondNum) {
-        return firstNum < 0 || secondNum < 0;
+    //입력값 중 음수가 있는지 확인하는 메소드
+    public boolean negativeIntegerChecker(T firstNum, T secondNum) {
+        return firstNum.doubleValue() < 0 || secondNum.doubleValue() < 0;
     }
 
     // 지정된 연산 결과 출력
