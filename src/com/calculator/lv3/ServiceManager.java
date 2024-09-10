@@ -130,8 +130,6 @@ public class ServiceManager {
                                     }
                                 }
                             }
-                        default:
-                            System.out.println("yes, exit, hist 로 만 입력해주세요.");
                     }
                 }
                 // 스캐너를 통한 숫자 1,2 입력 후 변수저장.

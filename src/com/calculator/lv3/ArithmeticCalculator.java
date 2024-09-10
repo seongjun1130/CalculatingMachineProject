@@ -41,7 +41,7 @@ enum OperatorType {
 
 // Class 제네릭화 Number 하위클래스만 받을수있게 제약
 public class ArithmeticCalculator<T extends Number> {
-    private double result = 0;
+    private double result;
     // 연산과정 및 결과 저장 List 생성
     private ArrayList<T> firstNumbers = new ArrayList<>();
     private ArrayList<T> secondNumbers = new ArrayList<>();
@@ -51,36 +51,40 @@ public class ArithmeticCalculator<T extends Number> {
     private String calculationProcess = "";
     // 연산자 열거객체 저장변수
     OperatorType operatorType;
+    // 계산식 다형성 부여를 위한 매니저 객체생성
+    CalculatorManager cm = new CalculatorManager();
+
 
     /* 사칙연산 계산 부분 메소드 매개변수로 요소를 받아 계산 후 리턴
      throws 키워드를 통해 직접 예외를 처리하지않고 발생지에서 처리요청
      열거 객체를 통한 사칙연산 구분 */
-    public double calculate(T firstNum, T secondNum, String operator) throws ArithmeticException, OperatorInputException {
+    public double calculate(T firstNum, T secondNum, String operator) throws ArithmeticException {
         operatorType = OperatorType.find(operator);
         switch (operatorType) {
             case ADD:
-                result = firstNum.doubleValue() + secondNum.doubleValue();
+                cm.setCalculate(new AddCalculator());
+                result = cm.getCalculate().calculate(firstNum, secondNum);
                 // 연산 과정 및 결과 저장 메서드 호출.
                 saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
             case SUB:
-                result = firstNum.doubleValue() - secondNum.doubleValue();
+                cm.setCalculate(new SubCalculator());
+                result = cm.getCalculate().calculate(firstNum, secondNum);
                 saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
             case MULT:
-                result = firstNum.doubleValue() * secondNum.doubleValue();
+                cm.setCalculate(new MultCalculator());
+                result = cm.getCalculate().calculate(firstNum, secondNum);
                 saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
             case DIV:
-                // 분모가 0일경우 예외 발생 유도.
-                if (secondNum.doubleValue() == 0 || secondNum.doubleValue() == 0.0) {
-                    throw new ArithmeticException("0으로는 나눌 수 없습니다.");
-                }
-                result = firstNum.doubleValue() / secondNum.doubleValue();
+                cm.setCalculate(new DivCalculator());
+                result = cm.getCalculate().calculate(firstNum, secondNum);
                 saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
             case REM:
-                result = firstNum.doubleValue() % secondNum.doubleValue();
+                cm.setCalculate(new RemCalculator());
+                result = cm.getCalculate().calculate(firstNum, secondNum);
                 saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
         }
