@@ -59,7 +59,7 @@ public class ArithmeticCalculator<T extends Number> {
      throws 키워드를 통해 직접 예외를 처리하지않고 발생지에서 처리요청
      열거 객체를 통한 사칙연산 구분 */
     /* CalculatorManager 가 가지는 구현객체를 통해 객체를 추상클래스타입 변수로 갈아끼워 호출명은 동일하지만
-    * 계산연산이 바뀌도록 다형성 부여 */
+     * 계산연산이 바뀌도록 다형성 부여 */
     public double calculate(T firstNum, T secondNum, String operator) throws ArithmeticException {
         operatorType = OperatorType.find(operator);
         switch (operatorType) {
@@ -242,24 +242,40 @@ public class ArithmeticCalculator<T extends Number> {
     }
 
     // 입력값보다 큰값 출력, 스트림,람다식 사용
-    public void getInputLargerThanContent(double baseValue) {
-        System.out.println(baseValue + " 보다 큰 값은");
-        results.stream().filter(result -> baseValue < result).forEach(System.out::println);
-        System.out.println("입니다.");
+    public void getInputLargerThanContent(double baseValue) throws EmptyListException {
+        if (emptyListChecker()) {
+            throw new EmptyListException("저장된 결과값이 없습니다.");
+        } else {
+            System.out.println(baseValue + " 보다 큰 값은");
+            results.stream().filter(result -> baseValue < result).forEach(System.out::println);
+            System.out.println("입니다.");
+        }
     }
 
     // 결과 리스트의 평균값 리턴
-    public double getAvg() {
-        return results.stream().filter(Objects::nonNull).mapToDouble(Double::doubleValue).average().orElse(0);
+    public double getAvg() throws EmptyListException {
+        if (emptyListChecker()) {
+            throw new EmptyListException("저장된 결과값이 없습니다.");
+        } else {
+            return results.stream().filter(Objects::nonNull).mapToDouble(Double::doubleValue).average().orElse(0);
+        }
     }
 
     // 결과 리스트중 최댓값 리턴
-    public double getMax() {
-        return results.stream().filter(Objects::nonNull).mapToDouble(Double::doubleValue).max().orElse(0);
+    public double getMax() throws EmptyListException {
+        if (emptyListChecker()) {
+            throw new EmptyListException("저장된 결과값이 없습니다.");
+        } else {
+            return results.stream().filter(Objects::nonNull).mapToDouble(Double::doubleValue).max().orElse(0);
+        }
     }
 
     // 결과 리스트중 최솟값 리턴
-    public double getMin() {
-        return results.stream().filter(Objects::nonNull).mapToDouble(Double::doubleValue).min().orElse(0);
+    public double getMin() throws EmptyListException {
+        if (emptyListChecker()) {
+            throw new EmptyListException("저장된 결과값이 없습니다.");
+        } else {
+            return results.stream().filter(Objects::nonNull).mapToDouble(Double::doubleValue).min().orElse(0);
+        }
     }
 }
