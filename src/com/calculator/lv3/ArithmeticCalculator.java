@@ -58,6 +58,8 @@ public class ArithmeticCalculator<T extends Number> {
     /* 사칙연산 계산 부분 메소드 매개변수로 요소를 받아 계산 후 리턴
      throws 키워드를 통해 직접 예외를 처리하지않고 발생지에서 처리요청
      열거 객체를 통한 사칙연산 구분 */
+    /* CalculatorManager 가 가지는 구현객체를 통해 객체를 추상클래스타입 변수로 갈아끼워 호출명은 동일하지만
+    * 계산연산이 바뀌도록 다형성 부여 */
     public double calculate(T firstNum, T secondNum, String operator) throws ArithmeticException {
         operatorType = OperatorType.find(operator);
         switch (operatorType) {
