@@ -241,4 +241,19 @@ public class ArithmeticCalculator<T extends Number> {
         results.stream().filter(result -> baseValue < result).forEach(System.out::println);
         System.out.println("입니다.");
     }
+
+    // 결과 리스트의 평균값 리턴
+    public double getAvg() {
+        return results.stream().filter(Objects::nonNull).mapToDouble(Double::doubleValue).average().orElse(0);
+    }
+
+    // 결과 리스트중 최댓값 리턴
+    public double getMax() {
+        return results.stream().filter(Objects::nonNull).mapToDouble(Double::doubleValue).max().orElse(0);
+    }
+
+    // 결과 리스트중 최솟값 리턴
+    public double getMin() {
+        return results.stream().filter(Objects::nonNull).mapToDouble(Double::doubleValue).min().orElse(0);
+    }
 }

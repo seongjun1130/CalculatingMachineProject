@@ -16,7 +16,6 @@ public class ServiceManager {
     private String number = null;
     private String selIndex = "0";
     private String menu;
-    private boolean flag = true;
     private boolean menuFlag;
     private boolean inMenuFlag = false;
     private ArithmeticCalculator calc = new ArithmeticCalculator();
@@ -61,13 +60,14 @@ public class ServiceManager {
                                 System.out.println("1. 가장 최근 연산 결과 확인. 2. 모든 연산 결과확인. 3. 지정 연산결과 확인.");
                                 System.out.println("4. 가장 최근 연산 과정 확인. 5. 모든 연산 과정확인. 6. 지정 연산과정 확인.");
                                 System.out.println("7. 가장 최근 연산 기록 삭제. 8. 모든 연산 삭제. 9. 지정 연산기록 삭제");
-                                System.out.println("0. 메뉴 빠져나오기 #. 입력값보다 큰 결과 값 보기");
+                                System.out.println("#. 입력값보다 큰 결과 값 보기 *. 결과들의 평균 보기 !. 결과 최댓값 보기");
+                                System.out.println("@. 결과 최솟값 보기. 0. 메뉴 빠져나오기");
                                 System.out.println("=========================================================================");
                                 System.out.print("메뉴 입력 :");
                                 selIndex = sc.nextLine();
                                 System.out.println("=========================================================================");
                                 // 문자를 입력받아 정규식으로 검증 후 메뉴 실행.
-                                if (!selIndex.matches("[0-9#]+")) {
+                                if (!selIndex.matches("[0-9#*!@]+")) {
                                     System.out.println("보기에 있는 문자만 입력이 가능합니다.");
                                 } else {
                                     switch (selIndex) {
@@ -114,6 +114,18 @@ public class ServiceManager {
                                             baseNum = sc.nextDouble();
                                             calc.getInputLargerThanContent(baseNum);
                                             sc.nextLine();
+                                            break;
+                                        case "*":
+                                            System.out.println("결과들의 평균값을 가져옵니다.");
+                                            System.out.println(Math.round(calc.getAvg() * 100) / 100.0);
+                                            break;
+                                        case "!":
+                                            System.out.println("결과의 최댓값은");
+                                            System.out.println(calc.getMax());
+                                            break;
+                                        case "@":
+                                            System.out.println("결과의 최솟값은");
+                                            System.out.println(calc.getMin());
                                             break;
                                     }
                                 }
