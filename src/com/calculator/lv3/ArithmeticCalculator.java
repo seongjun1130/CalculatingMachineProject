@@ -50,9 +50,9 @@ public class ArithmeticCalculator<T extends Number> {
     // 연산 과정 출력용 String 변수
     private String calculationProcess = "";
     // 연산자 열거객체 저장변수
-    OperatorType operatorType;
+    private OperatorType operatorType;
     // 계산식 다형성 부여를 위한 매니저 객체생성
-    CalculatorManager cm = new CalculatorManager();
+    private CalculatorManager cm = new CalculatorManager();
 
 
     /* 사칙연산 계산 부분 메소드 매개변수로 요소를 받아 계산 후 리턴
@@ -65,31 +65,23 @@ public class ArithmeticCalculator<T extends Number> {
         switch (operatorType) {
             case ADD:
                 cm.setCalculate(new AddCalculator());
-                result = cm.getCalculate().calculate(firstNum, secondNum);
-                // 연산 과정 및 결과 저장 메서드 호출.
-                saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
             case SUB:
                 cm.setCalculate(new SubCalculator());
-                result = cm.getCalculate().calculate(firstNum, secondNum);
-                saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
             case MULT:
                 cm.setCalculate(new MultCalculator());
-                result = cm.getCalculate().calculate(firstNum, secondNum);
-                saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
             case DIV:
                 cm.setCalculate(new DivCalculator());
-                result = cm.getCalculate().calculate(firstNum, secondNum);
-                saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
             case REM:
                 cm.setCalculate(new RemCalculator());
-                result = cm.getCalculate().calculate(firstNum, secondNum);
-                saveCalculationProcess(firstNum, secondNum, result, operator);
                 break;
         }
+        // 연산 과정 및 결과 저장 메서드 호출.
+        result = cm.getCalculate().calculate(firstNum, secondNum);
+        saveCalculationProcess(firstNum, secondNum, result, operator);
         return result;
     }
 
