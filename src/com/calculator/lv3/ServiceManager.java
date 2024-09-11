@@ -3,13 +3,13 @@ package com.calculator.lv3;
 import com.calculator.lv3.customexception.*;
 
 import java.util.Collections;
-import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+// 메뉴타입 enum 클래스 화
 enum MainmenuType {
     EXIT("exit"),
     YES("yes"),
@@ -30,10 +30,9 @@ enum MainmenuType {
         if (MAINMENU_TYPE_MAP_MAP.containsKey(mainmenu)) {
             return MAINMENU_TYPE_MAP_MAP.get(mainmenu);
         } else {
+            // 지정메뉴외 문자 입력시 예외발생
             throw new NullPointerException("메뉴중에서 입력해주세요.");
         }
-        //연산자 외 문자 입력시 예외 발생 유도
-//        throw new IllegalArgumentException("맞지 않는 연산자 입력 : " + operator);
     }
 
     public String getMainmenu() {
@@ -67,12 +66,7 @@ public class ServiceManager {
                 yes 입력시 계산 진행
                 hist 입력시 기록 확인
                 그외 문자 입력시 반복 */
-                System.out.println("================================================================================");
-                System.out.println("메뉴를 선택해주세요.");
-                System.out.println("exit 입력 시 종료 / yes 입력 시 계산 / hist 입력 시 저장된 결과 확인");
-                System.out.print("메뉴 입력 : ");
-                menu = sc.nextLine();
-                System.out.println("================================================================================");
+                displayMenu();
                 Mainmenu = MainmenuType.find(menu);
                 switch (Mainmenu) {
                     case EXIT:
@@ -251,5 +245,15 @@ public class ServiceManager {
                 }
             }
         }
+    }
+
+    // Menu 출력용 메소드
+    private void displayMenu() {
+        System.out.println("================================================================================");
+        System.out.println("메뉴를 선택해주세요.");
+        System.out.println("exit 입력 시 종료 / yes 입력 시 계산 / hist 입력 시 저장된 결과 확인");
+        System.out.print("메뉴 입력 : ");
+        menu = sc.nextLine();
+        System.out.println("================================================================================");
     }
 }
