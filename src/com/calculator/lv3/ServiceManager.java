@@ -1,6 +1,7 @@
 package com.calculator.lv3;
 
 import com.calculator.lv3.customexception.*;
+import com.calculator.lv3.operations.*;
 
 import java.util.Collections;
 import java.util.Map;
@@ -116,6 +117,7 @@ public class ServiceManager {
         int firstintcnt = 0;
         int seconddoublecnt = 0;
         int secondintcnt = 0;
+        CalculatorManager cm = new CalculatorManager();
         // 스캐너를 통한 숫자 1,2 입력 후 변수저장.
         System.out.print("첫 번째 숫자를 입력하세요 : ");
         number = sc.nextLine();
@@ -139,29 +141,49 @@ public class ServiceManager {
         // 스캐너를 통한 사칙연산 기호 삽입.
         System.out.print("사칙연산 기호를 입력하세요 : ");
         String operator = sc.nextLine();
+        // enum 열거객체를 받아와 연산확인
+        /* CalculatorManager 가 가지는 구현객체를 통해 객체를 추상클래스타입 변수로 갈아끼워 호출명은 동일하지만
+         * 계산연산이 바뀌도록 다형성 부여 */
+        switch (OperatorType.find(operator)) {
+            case ADD:
+                cm.setCalculate(new AddCalculator());
+                break;
+            case SUB:
+                cm.setCalculate(new SubCalculator());
+                break;
+            case MULT:
+                cm.setCalculate(new MultCalculator());
+                break;
+            case DIV:
+                cm.setCalculate(new DivCalculator());
+                break;
+            case REM:
+                cm.setCalculate(new RemCalculator());
+                break;
+        }
         /* Calculator 객체를 통한 calculate() 메소드를 통해 계산.
         정수인지 실수인지에 대한 타입분간.
         입력값중 음수가 있는지 판단.*/
         if (fisrtdoublecnt != 0 && seconddoublecnt != 0) {
-            if (calc.negativeIntegerChecker(firstNumDouble, secondNumDouble)) {
+            if (calc.isNegativeNumber(firstNumDouble, secondNumDouble)) {
                 System.out.println("양수만 입력해주세요.");
             }
-            System.out.println(firstNumDouble + " " + operator + " " + secondNumDouble + " = " + calc.calculate(firstNumDouble, secondNumDouble, operator));
+            System.out.println(firstNumDouble + " " + operator + " " + secondNumDouble + " = " + calc.calculate(firstNumDouble, secondNumDouble, cm.getCalculate()));
         } else if (firstintcnt != 0 && secondintcnt != 0) {
-            if (calc.negativeIntegerChecker(firstNumInt, secondNumInt)) {
+            if (calc.isNegativeNumber(firstNumInt, secondNumInt)) {
                 System.out.println("양수만 입력해주세요.");
             }
-            System.out.println(firstNumInt + " " + operator + " " + secondNumInt + " = " + calc.calculate(firstNumInt, secondNumInt, operator));
+            System.out.println(firstNumInt + " " + operator + " " + secondNumInt + " = " + calc.calculate(firstNumInt, secondNumInt, cm.getCalculate()));
         } else if (firstintcnt != 0 && seconddoublecnt != 0) {
-            if (calc.negativeIntegerChecker(firstNumInt, secondNumDouble)) {
+            if (calc.isNegativeNumber(firstNumInt, secondNumDouble)) {
                 System.out.println("양수만 입력해주세요.");
             }
-            System.out.println(firstNumInt + " " + operator + " " + secondNumDouble + " = " + calc.calculate(firstNumInt, secondNumDouble, operator));
+            System.out.println(firstNumInt + " " + operator + " " + secondNumDouble + " = " + calc.calculate(firstNumInt, secondNumDouble, cm.getCalculate()));
         } else {
-            if (calc.negativeIntegerChecker(firstNumDouble, secondNumInt)) {
+            if (calc.isNegativeNumber(firstNumDouble, secondNumInt)) {
                 System.out.println("양수만 입력해주세요.");
             }
-            System.out.println(firstNumDouble + " " + operator + " " + secondNumInt + " = " + calc.calculate(firstNumDouble, secondNumInt, operator));
+            System.out.println(firstNumDouble + " " + operator + " " + secondNumInt + " = " + calc.calculate(firstNumDouble, secondNumInt, cm.getCalculate()));
         }
     }
 
